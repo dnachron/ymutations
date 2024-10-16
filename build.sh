@@ -41,4 +41,9 @@ CREATE INDEX "ymutation_e_name_bb292a_idx" ON "ymutation_error" ("name");
 for file_name in ./rawfile/ymutation??.csv; do
     sqlite3 ymutations.sqlite3 ".mode csv" ".import $file_name ymutation"
 done
+
+# update ybrowse_synced from text to bool
+sqlite3 ymutations.sqlite3 "UPDATE ymutation SET ybrowse_synced = TRUE WHERE ybrowse_synced = 'True';"
+sqlite3 ymutations.sqlite3 "UPDATE ymutation SET ybrowse_synced = FALSE WHERE ybrowse_synced = 'False';"
+
 sqlite3 ymutations.sqlite3 ".mode csv" ".import ./rawfile/ymutation_error.csv ymutation_error"
