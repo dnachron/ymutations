@@ -1,6 +1,6 @@
 # YMutations
 
-DNAChron's Y related database, include mutation info from [ybrowse.org](https://ybrowse.org/)
+DNAChron's Y related database, include mutation info from [ybrowse.org](https://ybrowse.org/). Based on T2T reference.
 
 ## README.md
 
@@ -25,7 +25,7 @@ To provide a offline, standard, batch process tools for conversion and search on
 
 ## Data sources
 
-Original information from [ybrowse.org](https://ybrowse.org/), processed and standardized by the DNAChron website.  
+Original information from [ybrowse.org](https://ybrowse.org/), processed and standardized by the DNAChron website, and lift over to T2T reference.  
 The direct data source is the database used by the DNAChron website. For data standardize and clean, and for website use, a little adjustment is made to the data. See the [difference with ybrowse](#difference-with-ybrowse) section for details
 
 Welcome to visit our website.
@@ -67,19 +67,19 @@ You will find sqlite3.exe after decompression. Set it's path to windows environm
 *github*
 
 ```
-git clone https://github.com/dnachron/dnachronYdb.git
+git clone https://github.com/dnachron/ymutations.git
 ```
 
 *gitee*
 
 ```
-git clone https://gitee.com/dnachron/dnachronYdb.git
+git clone https://gitee.com/dnachron/ymutations.git
 ```
 
 ### Update and build the database
 
 ```
-cd ./dnachronYdb
+cd ./ymutations
 ./build.sh
 ```
 
@@ -99,7 +99,7 @@ You can use database management tools to view, search and filter data. Such as [
     - For mutations named after March 2020, they are configured according to the real naming date.
 2. Add a list of error mutations, ymutation_error, which is used to store the mutation that fails the verification.
 3. Verify the mutation position. Position that are not within the reference will be added to the list of error mutations.
-4. Verify the mutation name extension. According to the rules described in [ISOGG WIKI](https://isogg.org/tree/SNPswithExtensions.html), the name ending in .1/.2, indicating that the same mutation is found in different haplogroup, that is, parallel mutation. In dnachronYdb, parallel mutations use the same name without distinction. Mutations in different extensions can cause mutations to appear as L49/L49.1/L49.2, which is redundant. Therefore, all the . extension name are removed from database, and added to the list of error mutations. Preserve mutation name without extension.  
+4. Verify the mutation name extension. According to the rules described in [ISOGG WIKI](https://isogg.org/tree/SNPswithExtensions.html), the name ending in .1/.2, indicating that the same mutation is found in different haplogroup, that is, parallel mutation. In ymutations, parallel mutations use the same name without distinction. Mutations in different extensions can cause mutations to appear as L49/L49.1/L49.2, which is redundant. Therefore, all the . extension name are removed from database, and added to the list of error mutations. Preserve mutation name without extension.  
 If conflicts are found, try to manually select reasonable results, or select according to the mutation used in the ISOGG tree. If the conflict cannot be resolved, add it to the list of error mutations.
 5. If the mutation not in ybrowse but in the ISOGG tree, added it according to the ISOGG tree information.
 6. The INDEL mutations are standardized.
@@ -109,3 +109,5 @@ If conflicts are found, try to manually select reasonable results, or select acc
     - For indel mutations contained in the reference sequence itself, reverse check the reference sequence.
     - For MNP and complex, all are added to the error mutation list because can't be verified. We mark MNP and complex as multiple SNPs or INDELs.
 7. For program compatibility of DNAChron website, a fake mutation is added: Root, 0, G, C. Just ignore it.
+8. All positions are lift over to T2T reference.
+9. Include mutations DNAChron named but not synced by Ybrowse.

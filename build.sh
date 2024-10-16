@@ -11,38 +11,34 @@ if ! rm ymutations.sqlite3 -f; then
     exit 1
 fi
 
-sqlite3 ymutations.sqlite3 'CREATE TABLE ymutation (
-        id               INTEGER            NOT NULL
-                                            PRIMARY KEY AUTOINCREMENT,
-        name             VARCHAR (25)       NOT NULL,
-        position         [INTEGER UNSIGNED] NOT NULL
-                                            CHECK ("position" >= 0),
-        mutation_type    VARCHAR (5)        NOT NULL,
-        ancestral        VARCHAR (100)      NOT NULL,
-        derived          VARCHAR (100)      NOT NULL,
-        join_date        DATE               NOT NULL,
-        ycc_haplogroup   TEXT,
-        isogg_haplogroup TEXT,
-        ref              TEXT,
-        comment          TEXT,
-        CONSTRAINT models_ymutations_unique_name UNIQUE (
-            name
-        )
-    );' \
-    "CREATE UNIQUE INDEX ymutation_name_ded686_idx ON ymutation(name);" \
-    "CREATE INDEX ymutation_positio_fef5ef_idx ON ymutation(position);" \
-    "CREATE TABLE ymutation_error (
-        id        INTEGER      NOT NULL
-                            PRIMARY KEY AUTOINCREMENT,
-        name      VARCHAR (25) NOT NULL,
-        join_date DATE         NOT NULL,
-        CONSTRAINT models_yerrormutation_unique_name UNIQUE (
-            name
-        )
-    );" \
-    "CREATE UNIQUE INDEX ymutation_e_name_bb292a_idx ON ymutation_error(name);"
+sqlite3 ymutations.sqlite3 '''
+CREATE TABLE "ymutation" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+  "name" varchar(25) NOT NULL, 
+  "position" integer unsigned NOT NULL CHECK ("position" >= 0), 
+  "mutation_type" varchar(5) NOT NULL, 
+  "ancestral" varchar(100) NOT NULL, 
+  "derived" varchar(100) NOT NULL, 
+  "join_date" date NOT NULL, 
+  "ycc_haplogroup" text NULL, 
+  "isogg_haplogroup" text NULL, 
+  "ref" text NULL, 
+  "comment" text NULL, 
+  "ybrowse_synced" bool NOT NULL, 
+  CONSTRAINT "models_ymutations_unique_name" UNIQUE ("name")
+);
+CREATE INDEX "ymutation_positio_fef5ef_idx" ON "ymutation" ("position");
+CREATE INDEX "ymutation_join_da_186260_idx" ON "ymutation" ("join_date");
+CREATE TABLE "ymutation_error" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+  "name" varchar(25) NOT NULL, 
+  "join_date" date NOT NULL, 
+  CONSTRAINT "models_yerrormutation_unique_name" UNIQUE ("name")
+);
+CREATE INDEX "ymutation_e_name_bb292a_idx" ON "ymutation_error" ("name");
+'''
 
-for file_name in ./ymutation/ymutation??.csv; do
+for file_name in ./rawfile/ymutation??.csv; do
     sqlite3 ymutations.sqlite3 ".mode csv" ".import $file_name ymutation"
 done
-sqlite3 ymutations.sqlite3 ".mode csv" ".import ./ymutation/ymutation_error.csv ymutation_error"
+sqlite3 ymutations.sqlite3 ".mode csv" ".import ./rawfile/ymutation_error.csv ymutation_error"

@@ -1,6 +1,6 @@
-# dnachronYdb
+# YMutations
 
-基因志(DNAChron) Y数据库。包含[ybrowse.org](https://ybrowse.org/)的突变信息。
+基因志(DNAChron) Y数据库。包含[ybrowse.org](https://ybrowse.org/)的突变信息。基于T2T参考序列。
 
 ## README.md
 
@@ -9,8 +9,8 @@
 
 ## 该项目同时托管于
 
-- [GitHub](https://github.com/dnachron/dnachronYdb)
-- [Gitee](https://gitee.com/dnachron/dnachronYdb)
+- [GitHub](https://github.com/dnachron/ymutations)
+- [Gitee](https://gitee.com/dnachron/ymutations)
 
 ## 为什么创建该项目
 
@@ -25,7 +25,7 @@
 
 ## 数据来源
 
-原始信息从[ybrowse.org](https://ybrowse.org/)采集，由基因志网站处理并标准化。  
+原始信息从[ybrowse.org](https://ybrowse.org/)采集，由基因志网站处理、标准化，并转换为T2T参考序列。  
 直接数据来源是基因志网站使用的数据库。为了数据标准化、整洁以及为了网站使用，对数据有少许调整，具体见[与ybrowse差异](#与ybrowse差异)。
 
 欢迎访问我们的网站
@@ -67,19 +67,19 @@ sudo apt-get install git sqlite3
 *github*
 
 ```
-git clone https://github.com/dnachron/dnachronYdb.git
+git clone https://github.com/dnachron/ymutations.git
 ```
 
 *gitee*
 
 ```
-git clone https://gitee.com/dnachron/dnachronYdb.git
+git clone https://gitee.com/dnachron/ymutations.git
 ```
 
 ### 更新及生成数据库
 
 ```
-cd ./dnachronYdb
+cd ./ymutations
 ./build.sh
 ```
 
@@ -99,7 +99,7 @@ cd ./dnachronYdb
     - 对于2020年3月份以后命名的突变，按照具体命名日期配置。
 2. 增加了错误突变列表，ymutation_error，用于存储校验不通过的突变。
 3. 校验突变坐标。不在参考系范围内的坐标，会被加入错误突变列表。
-4. 校验突变扩展名。按照[ISOGG WIKI](https://isogg.org/tree/SNPswithExtensions.html)的规则，命名中含有类似.1 .2扩展名的突变，表示同一个突变发现在不同分支，也即平行突变。dnachronYdb中，平行突变使用同一个名字，不做区分。不同扩展名突变会导致突变显示为如L49/L49.1/L49.2，冗余。因此去掉了数据库中所有的.扩展名突变，并加入错误突变列表。 保留无扩展名的突变名。
+4. 校验突变扩展名。按照[ISOGG WIKI](https://isogg.org/tree/SNPswithExtensions.html)的规则，命名中含有类似.1 .2扩展名的突变，表示同一个突变发现在不同分支，也即平行突变。ymutations中，平行突变使用同一个名字，不做区分。不同扩展名突变会导致突变显示为如L49/L49.1/L49.2，冗余。因此去掉了数据库中所有的.扩展名突变，并加入错误突变列表。 保留无扩展名的突变名。
 这个过程中，如果发现有冲突，尽量手工选取合理结果，或者按照ISOGG树上使用的突变选取。如果冲突无法解决，加入错误突变列表中。
 5. ybrowse中没有，ISOGG树上有的突变，按照ISOGG树信息添加。
 6. 对INDEL突变进行了标准化处理。
@@ -109,3 +109,5 @@ cd ./dnachronYdb
     - 对于参考序列本身包含的INDEL突变，反向校验参考序列。
     - 对于MNP和complex，因为无法校验，加入错误突变列表。我们把MNP和complex标记为多个SNP或INDEL。
 7. 为了基因志网站程序兼容性，添加了一个假突变：Root, 0, G, C。忽略即可。
+8. 所有坐标均转换为T2T参考序列。
+9. 增加了基因志命名，但未被YBrowse收录的突变，并添加ybrowse_synced字段以示区分
