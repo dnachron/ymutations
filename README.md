@@ -110,4 +110,4 @@ If conflicts are found, try to manually select reasonable results, or select acc
     - For MNP and complex, all are added to the error mutation list because can't be verified. We mark MNP and complex as multiple SNPs or INDELs.
 7. For program compatibility of DNAChron website, a fake mutation is added: Root, 0, G, C. Just ignore it.
 8. All positions are lift over to T2T reference.
-9. Include mutations DNAChron named but not synced by Ybrowse.
+9. Include mutations DNAChron named but not synced by Ybrowse. Add column ybrowse_synced to distinguish it.
